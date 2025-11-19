@@ -117,7 +117,7 @@ class AuthController extends Controller
         $user->email_verified_at = Carbon::now();
         $user->save();
 
-        return response()->json(['message' => 'Email verified successfully']);
+        return redirect('http://localhost:5173/verifysuccess'); // Redirect to a success page
     }
 
     /**
@@ -140,7 +140,7 @@ class AuthController extends Controller
             ['token' => $token, 'created_at' => Carbon::now()]
         );
 
-        $url = url('/')."/api/password/reset?token={$token}&email=".urlencode($user->email);
+        $url = url('http://localhost:5173/resetpassword')."/?token={$token}&email=".urlencode($user->email);
         Mail::to($user->email)->send(new ResetPasswordMail($url));
 
         return response()->json(['message' => 'If your email exists, a reset link has been sent']);

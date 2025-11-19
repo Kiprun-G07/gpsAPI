@@ -89,7 +89,7 @@ class AdminController extends Controller
             ['token' => $token, 'created_at' => Carbon::now()]
         );
 
-        $url = url('/')."/api/admin/password/reset?token={$token}&email=".urlencode($admin->email);
+        $url = url('http://localhost:5173/admin/resetpassword')."/?token={$token}&email=".urlencode($admin->email);
         Mail::to($admin->email)->send(new ResetPasswordMail($url));
 
         return response()->json(['message' => 'If your email exists, a reset link has been sent']);
@@ -157,8 +157,27 @@ class AdminController extends Controller
     /**
      * Get admin profile
      */
-    public function getProfile($id)
+    public function getProfile(Request $request, $id = null)
     {
+        if ($id === null) {
+                $token = $request->bearerToken();
+                if (!$token) {
+                    return response()->json([
+                        'message' => 'No token provided'
+                    ], 401);
+                }
+
+                $decoded = $this->verifyToken($token);
+                if (!$decoded) {
+                    return response()->json([
+                        'message' => 'Invalid token'
+                    ], 401);
+                }
+
+                error_log('Decoded token: ' . print_r($decoded, true));
+
+                $id = $decoded->admin->id;
+            }
         $admin = Admin::findOrFail($id);
         
         return response()->json([
@@ -171,6 +190,16 @@ class AdminController extends Controller
             ]
         ]);
     }
+
+    public function verifyToken($token)
+    {
+        try {
+            $decoded = JWT::decode($token, new Key($this->key, 'HS256'));
+            return $decoded;
+        } catch (\Exception $e) {
+            return null;
+        }
+    }   
 
     /**
      * Update admin profile

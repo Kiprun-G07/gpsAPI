@@ -45,10 +45,18 @@ Route::prefix('admin')->group(function () {
         Route::put('/{id}', [AdminController::class, 'update']);
         Route::delete('/{id}', [AdminController::class, 'delete']);
     });
+
+    Route::post('/password/forgot', [AdminController::class, 'forgotPassword']);
+    Route::post('/password/reset', [AdminController::class, 'resetPassword']);
 });
 
 Route::prefix('events')->group(function () {
     Route::get('/', [EventController::class, 'index']);
+    Route::prefix('{id}')->group(function () {
+        Route::get('/', [EventController::class, 'show']);
+        Route::post('/attend', [EventController::class, 'attend']);
+        Route::post('/join-crew', [EventController::class, 'assignCrewMember']);
+    });
 });
 
 // Admin password reset
@@ -68,7 +76,7 @@ Route::middleware(\App\Http\Middleware\JwtMiddleware::class)->group(function () 
 
     // Admin profile routes
     Route::prefix('admin/profile')->group(function () {
-        Route::get('/{id}', [AdminController::class, 'getProfile']);
+        Route::get('/{id?}', [AdminController::class, 'getProfile']);
         Route::put('/{id}', [AdminController::class, 'update']);
     });
 });

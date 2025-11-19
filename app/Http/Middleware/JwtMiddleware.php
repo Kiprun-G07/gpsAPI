@@ -32,10 +32,18 @@ class JwtMiddleware
 
             // Add user data to request for further use
             // Request input bags expect scalars/arrays, not stdClass objects — convert to array
-            $userArray = json_decode(json_encode($decoded->user), true);
-            $request->merge(['user' => $userArray]);
+            if(property_exists($decoded, 'user')){
+                $userArray = json_decode(json_encode($decoded->user), true);
+                $request->merge(['user' => $userArray]);
 
-            return $next($request);
+                return $next($request);
+            }
+            else {
+                $userArray = json_decode(json_encode($decoded->admin), true);
+                $request->merge(['user' => $userArray]);
+                return $next($request);
+            }
+
         } catch (Exception $e) {
             // Log the exception for server-side debugging
             Log::error('JWT middleware error: ' . $e->getMessage());
