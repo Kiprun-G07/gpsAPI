@@ -56,6 +56,7 @@ Route::prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'show']);
         Route::post('/attend', [EventController::class, 'attend']);
         Route::post('/join-crew', [EventController::class, 'assignCrewMember']);
+        Route::get('/joined', [EventController::class, 'checkIfJoinedAsCrewOrAttendee']);
     });
 });
 
@@ -78,5 +79,12 @@ Route::middleware(\App\Http\Middleware\JwtMiddleware::class)->group(function () 
     Route::prefix('admin/profile')->group(function () {
         Route::get('/{id?}', [AdminController::class, 'getProfile']);
         Route::put('/{id}', [AdminController::class, 'update']);
+    });
+
+    // Event routes
+    Route::prefix('events')->group(function () {
+        Route::post('/create', [EventController::class, 'create']);
+        Route::put('/{id}', [EventController::class, 'update']);
+        Route::delete('/{id}', [EventController::class, 'delete']);
     });
 });

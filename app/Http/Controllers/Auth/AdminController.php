@@ -47,7 +47,7 @@ class AdminController extends Controller
             'sub' => $admin->id,
             'iat' => time(),
             'exp' => time() + (60 * 60),
-            'admin' => [
+            'user' => [
                 'id' => $admin->id,
                 'email' => $admin->email,
                 'name' => $admin->name,
@@ -61,7 +61,7 @@ class AdminController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'expires_in' => 3600,
-            'admin' => [
+            'user' => [
                 'id' => $admin->id,
                 'name' => $admin->name,
                 'email' => $admin->email,
@@ -145,7 +145,7 @@ class AdminController extends Controller
 
         return response()->json([
             'message' => 'Admin created successfully',
-            'admin' => [
+            'user' => [
                 'id' => $admin->id,
                 'name' => $admin->name,
                 'email' => $admin->email,
@@ -176,12 +176,12 @@ class AdminController extends Controller
 
                 error_log('Decoded token: ' . print_r($decoded, true));
 
-                $id = $decoded->admin->id;
+                $id = $decoded->user->id;
             }
         $admin = Admin::findOrFail($id);
         
         return response()->json([
-            'admin' => [
+            'user' => [
                 'id' => $admin->id,
                 'name' => $admin->name,
                 'email' => $admin->email,
@@ -225,7 +225,7 @@ class AdminController extends Controller
 
         return response()->json([
             'message' => 'Admin profile updated successfully',
-            'admin' => [
+            'user' => [
                 'id' => $admin->id,
                 'name' => $admin->name,
                 'email' => $admin->email,
