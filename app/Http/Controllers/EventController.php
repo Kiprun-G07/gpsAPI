@@ -236,6 +236,32 @@ class EventController extends Controller
 
         return response()->json(['message' => 'Event deleted successfully'], 200);
     }
+
+    public function listAttendeesForAllEvents(Request $request)
+    {
+        try {
+            $token = $request->bearerToken();
+            if (!$token) {
+                return response()->json(['error' => 'Token not provided'], 401);
+            }
+
+            $decoded = JWT::decode($token, new Key($this->key, 'HS256'));
+
+            if (!property_exists($decoded, 'user')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+            $attendees = DB::table('event_attendees')
+                ->join('events', 'event_attendees.event_id', '=', 'events.id')
+                ->join('users', 'event_attendees.user_id', '=', 'users.id')
+                ->select('events.id', 'events.event_name', 'users.name', 'users.email')
+                ->get();
+
+            return response()->json($attendees, 200);
+        } catch (Exception $e) {
+            Log::error('Error in listAttendeesForAllEvents method: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
+    }
 }   
 
 ?>

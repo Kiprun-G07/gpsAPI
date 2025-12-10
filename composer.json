@@ -13,7 +13,9 @@
         "firebase/php-jwt": "^6.11",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.2",
-        "laravel/tinker": "^2.10.1"
+        "laravel/scout": "^10.22",
+        "laravel/tinker": "^2.10.1",
+        "typesense/typesense-php": "^5.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

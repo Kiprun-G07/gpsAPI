@@ -25,6 +25,9 @@ Route::options('/{any}', function () {
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/chatbot/message', [\App\Http\Controllers\ChatbotController::class, 'generateResponse']);
+
 Route::get('/user/profile/{id?}', [AuthController::class, 'getProfile']);
 // Email verification
 Route::post('/email/verify/request', [AuthController::class, 'sendEmailVerification']);
@@ -48,6 +51,9 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/password/forgot', [AdminController::class, 'forgotPassword']);
     Route::post('/password/reset', [AdminController::class, 'resetPassword']);
+
+    Route::get('/users', [AuthController::class, 'getAllUsers']);
+    Route::get('/eventattendees', [EventController::class, 'listAttendeesForAllEvents']);
 });
 
 Route::prefix('events')->group(function () {

@@ -351,4 +351,25 @@ class AuthController extends Controller
             ]
         ]);
     }
+
+    public function getAllUsers(Request $request)
+    {
+         try {
+            $token = $request->bearerToken();
+            if (!$token) {
+                return response()->json(['error' => 'Token not provided'], 401);
+            }
+
+            $decoded = JWT::decode($token, new Key($this->key, 'HS256'));
+
+            if (!property_exists($decoded, 'user')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+        
+            $users = User::select('id', 'name', 'email', 'matriculation_number', 'faculty', 'created_at')->get();
+            return response()->json($users);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
+    }
 }
