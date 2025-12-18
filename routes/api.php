@@ -37,6 +37,19 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])-
 Route::post('/password/forgot', [AuthController::class, 'forgotPassword']);
 Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
+// Forum routes
+Route::prefix('forum')->group(function () {
+    Route::get('/posts', [\App\Http\Controllers\ForumController::class, 'getAllPosts']);
+    Route::get('/posts/{id}', [\App\Http\Controllers\ForumController::class, 'getPost']);
+    Route::get('/posts/{id}/comments', [\App\Http\Controllers\ForumController::class, 'getPostComments']);
+    Route::get('/posts/{id}/likes', [\App\Http\Controllers\ForumController::class, 'getPostLikesCount']);
+    Route::post('/posts/{id}/comments', [\App\Http\Controllers\ForumController::class, 'createComment'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::post('/posts', [\App\Http\Controllers\ForumController::class, 'createPost'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::post('/posts/{id}/like', [\App\Http\Controllers\ForumController::class, 'likePost'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::post('/posts/{id}/unlike', [\App\Http\Controllers\ForumController::class, 'unlikePost'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::delete('/posts/{id}', [\App\Http\Controllers\ForumController::class, 'deletePost'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+});
+
 // Admin routes
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminController::class, 'login']);
