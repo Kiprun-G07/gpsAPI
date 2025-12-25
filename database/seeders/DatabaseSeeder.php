@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Event;
 use App\Models\ChatbotQuestion;
+use App\Models\SpendingType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -58,6 +59,18 @@ class DatabaseSeeder extends Seeder
 
         foreach ($chatbot_questions as $item) {
             ChatbotQuestion::factory()->create($item);
+        }
+
+        $spending_types = [
+            ['name' => 'Food & Beverages'],
+            ['name' => 'Transportation'],
+            ['name' => 'Accommodation'],
+            ['name' => 'Event Fees'],
+            ['name' => 'Miscellaneous'],
+        ];
+
+        foreach ($spending_types as $type) {
+            SpendingType::factory()->create($type);
         }
     }
 }

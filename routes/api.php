@@ -69,6 +69,16 @@ Route::prefix('admin')->group(function () {
     Route::get('/eventattendees', [EventController::class, 'listAttendeesForAllEvents']);
 });
 
+Route::prefix('spendings')->group(function () {
+    Route::get('/', [\App\Http\Controllers\SpendingController::class, 'index'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::get('/types', [\App\Http\Controllers\SpendingController::class, 'types'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::post('/', [\App\Http\Controllers\SpendingController::class, 'store'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::get('/by-type', [\App\Http\Controllers\SpendingController::class, 'thisMonthEachSpendingTypeTotals'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::get('/total', [\App\Http\Controllers\SpendingController::class, 'thisMonthTotal'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::get('/monthly-summary', [\App\Http\Controllers\SpendingController::class, 'thisMonthDailyTotals'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::get('/today', [\App\Http\Controllers\SpendingController::class, 'todaySpendings'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+});
+
 Route::prefix('events')->group(function () {
     Route::get('/', [EventController::class, 'index']);
     Route::prefix('{id}')->group(function () {
