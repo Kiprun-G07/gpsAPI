@@ -262,6 +262,41 @@ class EventController extends Controller
             return response()->json(['error' => 'An error occurred'], 500);
         }
     }
+
+    public function getUpcomingEventJoined(Request $request)
+    {
+        try {
+            $token = $request->bearerToken();
+            if (!$token) {
+                return response()->json(['error' => 'Token not provided'], 401);
+            }
+
+            $decoded = JWT::decode($token, new Key($this->key, 'HS256'));
+
+            if (!property_exists($decoded, 'user')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+
+            $userId = $decoded->user->id;
+
+            $upcomingEvent = DB::table('events')
+                ->join('event_attendees', 'events.id', '=', 'event_attendees.event_id')
+                ->where('event_attendees.user_id', $userId)
+                ->where('events.event_date', '>=', Carbon::now())
+                ->orderBy('events.event_date', 'asc')
+                ->select('events.*')
+                ->first();
+
+            if (!$upcomingEvent) {
+                return response()->json(['message' => 'No upcoming events found'], 404);
+            }
+
+            return response()->json($upcomingEvent, 200);
+        } catch (Exception $e) {
+            Log::error('Error in getUpcomingEventJoined method: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred'], 500);
+        }
+    }
 }   
 
 ?>

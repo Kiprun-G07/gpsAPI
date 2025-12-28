@@ -75,7 +75,7 @@ Route::prefix('spendings')->group(function () {
     Route::post('/', [\App\Http\Controllers\SpendingController::class, 'store'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
     Route::get('/by-type', [\App\Http\Controllers\SpendingController::class, 'thisMonthEachSpendingTypeTotals'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
     Route::get('/total', [\App\Http\Controllers\SpendingController::class, 'thisMonthTotal'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
-    Route::get('/monthly-summary', [\App\Http\Controllers\SpendingController::class, 'thisMonthDailyTotals'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
+    Route::get('/mconthly-summary', [\App\Http\Controllers\SpendingController::class, 'thisMonthDailyTotals'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
     Route::get('/today', [\App\Http\Controllers\SpendingController::class, 'todaySpendings'])->middleware(\App\Http\Middleware\JwtMiddleware::class);
 });
 
@@ -88,6 +88,9 @@ Route::prefix('events')->group(function () {
         Route::get('/joined', [EventController::class, 'checkIfJoinedAsCrewOrAttendee']);
     });
 });
+
+Route::get('/upcoming', [EventController::class, 'getUpcomingEventJoined']);
+
 
 // Admin password reset
 Route::post('admin/password/forgot', [AdminController::class, 'forgotPassword']);
