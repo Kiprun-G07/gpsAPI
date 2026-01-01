@@ -25,7 +25,15 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        return response()->json(Event::all(), 200);
+        //return all events with date sorted ascending but upcomingcomes first
+        $events = Event::orderBy('event_date', 'asc')->get();
+
+        //sort so that upcoming events come first
+        $events = $events->sortBy(function ($event) {
+            return $event->event_date < Carbon::now() ? 1 : 0;
+        })->values()->all();
+
+        return response()->json($events, 200);
     }
 
     public function show($id)
@@ -184,8 +192,15 @@ class EventController extends Controller
         return $attendee !== null;
     }
 
+    // Receive event data and create new event, with image upload handling
     public function create(Request $request)
     {
+        $image =  $request->file('event_image');
+        if ($image) {
+            $imagePath = $image->store('event_images', 'public');
+            $request->merge(['event_image_url' => env('APP_URL').'/storage/'.$imagePath]);
+        }
+        
         $request->validate([
             'event_name' => 'required|string|max:255',
             'event_date' => 'required|date',

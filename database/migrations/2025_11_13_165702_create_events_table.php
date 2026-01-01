@@ -18,6 +18,9 @@ return new class extends Migration
             $table->text('event_description')->nullable();
             $table->integer('max_participants')->nullable();
 
+            // store image URL
+            $table->string('event_image_url')->nullable();
+
             $table->id();
             $table->timestamps();
         });

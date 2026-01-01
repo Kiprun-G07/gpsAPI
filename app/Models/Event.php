@@ -21,5 +21,6 @@ class Event extends Authenticatable
         'event_location',
         'event_description',
         'max_participants',
+        'event_image_url',
     ];
 }
