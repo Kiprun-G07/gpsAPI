@@ -113,6 +113,8 @@ Route::middleware(\App\Http\Middleware\JwtMiddleware::class)->group(function () 
         Route::put('/{id}', [AdminController::class, 'update']);
     });
 
+    Route::post('admin/create', [AdminController::class, 'create']);    
+
     // Event routes
     Route::prefix('events')->group(function () {
         Route::post('/create', [EventController::class, 'create']);
