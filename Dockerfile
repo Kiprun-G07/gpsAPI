@@ -21,6 +21,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Copy application code
 COPY . /app
 
+# Create empty .env
+RUN cp /app/.env.example /app/.env
+
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 RUN php artisan key:generate --force
