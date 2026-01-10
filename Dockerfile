@@ -25,6 +25,10 @@ COPY . /app
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
 RUN php artisan migrate --force
+
+# Copy env example first
+COPY .env.example .env
+
 RUN php artisan key:generate --force
 RUN php artisan config:clear
 RUN php artisan cache:clear
