@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => ['http://localhost:5173', 'http://127.0.0.1:5173', 'http://127.0.0.1:8000', 'https://gpssiswa.me/'],
+    'allowed_origins' => ['https://gpssiswa.me', 'https://gpssiswa.me:8080'],
 
     'allowed_origins_patterns' => [],
 
