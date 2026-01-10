@@ -23,6 +23,7 @@ COPY . /app
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
+RUN php artisan key:generate --force
 RUN php artisan migrate --force
 RUN php artisan config:clear
 RUN php artisan cache:clear
