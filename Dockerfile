@@ -25,18 +25,12 @@ COPY . /app
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
 RUN php artisan migrate --force
-
+RUN php artisan config:clear
+RUN php artisan cache:clear
 # Copy env example first
 COPY .env.example .env
 
 RUN php artisan key:generate --force
-RUN php artisan config:clear
-RUN php artisan cache:clear
-# Copy .env (make sure you've configured MYSQL_PUBLIC_URL)
-#COPY .env /app/.env
-
-# Generate APP_KEY
-#RUN php artisan key:generate --force
 
 # Expose port (Railway uses $PORT automatically)
 EXPOSE 8000
