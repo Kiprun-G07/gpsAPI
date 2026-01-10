@@ -302,9 +302,9 @@ class EventController extends Controller
                 ->select('events.*')
                 ->first();
 
-            if (!$upcomingEvent) {
-                return response()->json(['message' => 'No upcoming events found'], 404);
-            }
+            // if (!$upcomingEvent) {
+            //     return response()->json(['message' => 'No upcoming events found'], 404);
+            // }
 
             return response()->json($upcomingEvent, 200);
         } catch (Exception $e) {
