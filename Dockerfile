@@ -28,7 +28,7 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction
 #COPY .env /app/.env
 
 # Generate APP_KEY
-RUN php artisan key:generate --force
+#RUN php artisan key:generate --force
 
 # Expose port (Railway uses $PORT automatically)
 EXPOSE 8080
