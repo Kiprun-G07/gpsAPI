@@ -25,7 +25,7 @@ COPY . /app
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
 # Copy .env (make sure you've configured MYSQL_PUBLIC_URL)
-COPY .env /app/.env
+#COPY .env /app/.env
 
 # Generate APP_KEY
 RUN php artisan key:generate --force
