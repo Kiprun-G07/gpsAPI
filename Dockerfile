@@ -24,8 +24,8 @@ RUN composer install --optimize-autoloader --no-dev --no-interaction
 RUN php artisan key:generate --force
 
 # Clear cache/config
-RUN php artisan config:clear
-RUN php artisan cache:clear
+#RUN php artisan config:clear
+#RUN php artisan cache:clear
 
 # Expose port
 EXPOSE 8000
