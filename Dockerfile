@@ -33,7 +33,7 @@ RUN php artisan cache:clear
 #RUN php artisan key:generate --force
 
 # Expose port (Railway uses $PORT automatically)
-EXPOSE 8080
+EXPOSE 8000
 
 # Run migrations and start FPM (production-ready)
 CMD php artisan migrate --force && php-fpm
