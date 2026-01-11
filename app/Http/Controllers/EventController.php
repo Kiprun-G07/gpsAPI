@@ -198,7 +198,7 @@ class EventController extends Controller
     {
         $image =  $request->file('event_image');
         if ($image) {
-            $imagePath =  Storage::disk('s3')->putFile('event_images', $image, 'public');
+            $imagePath =  Storage::disk('s3')->putFile('event_images', $image);
             $request->merge(['event_image_url' => Storage::disk('s3')->url($imagePath)]);
         }
         
