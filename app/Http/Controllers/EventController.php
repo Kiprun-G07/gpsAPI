@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -26,19 +25,13 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
+        //return all events with date sorted ascending but upcomingcomes first
         $events = Event::orderBy('event_date', 'asc')->get();
 
+        //sort so that upcoming events come first
         $events = $events->sortBy(function ($event) {
             return $event->event_date < Carbon::now() ? 1 : 0;
-        })->values();
-
-        $events->transform(function ($event) {
-            if ($event->event_image_url) {
-                $event->event_image_url = Storage::disk('s3')->url($event->event_image_url);
-            }
-
-            return $event;
-        });
+        })->values()->all();
 
         return response()->json($events, 200);
     }
@@ -204,13 +197,8 @@ class EventController extends Controller
     {
         $image =  $request->file('event_image');
         if ($image) {
-            $imagePath = Storage::disk('s3')->putFile(
-                'event_images',
-                $request->file('event_image'),
-                'public'
-            );
-
-            $request->merge(['event_image_url' => $imagePath]);
+            $imagePath = $image->store('event_images', 'public');
+            $request->merge(['event_image_url' => env('APP_URL').'/storage/'.$imagePath]);
         }
         
         $request->validate([
