@@ -96,7 +96,7 @@ class AuthController extends Controller
         );
 
         try {
-            Mail::to($user)->queue(new VerifyEmail());
+            Mail::to($user->email)->send(new VerifyEmail());
         } catch (\Throwable $e) {
             \Log::error($e->getMessage());
         }
