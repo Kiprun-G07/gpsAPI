@@ -95,7 +95,12 @@ class AuthController extends Controller
             ['id' => $user->id, 'hash' => sha1($user->email)]
         );
 
-        Mail::to($user->email)->send(new VerifyEmailMail($url));
+        try {
+            Mail::to($user)->queue(new VerifyEmail());
+        } catch (\Throwable $e) {
+            \Log::error($e->getMessage());
+        }
+
 
         return response()->json(['message' => 'Verification email sent']);
     }
